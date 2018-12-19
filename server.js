@@ -15,7 +15,7 @@ var PORT = process.env.PORT || 8080;
 // Requiring our models for syncing
 // var db = require("./models");
 var credentialsConfig = config.get('square');
-console.log('name: '+ credentialsConfig.get('name') +'password: ' + credentialsConfig.get('password'));
+console.log('application_ID: '+ credentialsConfig.get('applicationID') + ' personal_Access_Token: ' + credentialsConfig.get('personalAccessToken'));
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
