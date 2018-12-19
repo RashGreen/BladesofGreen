@@ -1,6 +1,6 @@
 const config = {
     square: {
-        applicationID: "",
+        applicationID: "sq0idp-L3Zq8zqhsQ4Lfebheybxyg",
         personalAccessToken: ""
 
     }
