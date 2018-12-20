@@ -5,21 +5,38 @@
 // *** Dependencies
 // =============================================================
 var express = require("express");
+<<<<<<< HEAD
 const SquareConnect = require('square-connect');
 const config = require('config')
 
+=======
+const SquareConnect = require("square-connect");
+const config = require("config");
+>>>>>>> bebc150ab60f42329fe5502e6d2e35debb0d9d14
 // Sets up the Express App
 // =============================================================
 var app = express();
-var PORT = process.env.PORT || 8080;
 
+<<<<<<< HEAD
 
 var credentialsConfig = config.get('square');
 console.log('application_ID: '+ credentialsConfig.get('applicationID') + ' personal_Access_Token: ' + credentialsConfig.get('personalAccessToken'));
+=======
+//Use handlebars
+var exphbs = require("express-handlebars");
+app.engine(
+  "handlebars",
+  exphbs({
+    defaultLayout: "main"
+  })
+);
+app.set("view engine", "handlebars");
+>>>>>>> bebc150ab60f42329fe5502e6d2e35debb0d9d14
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+<<<<<<< HEAD
 
 // Requiring our models for syncing
 var db = require("./models");
@@ -61,3 +78,13 @@ module.exports=app;
 app.use(express.static("public"));
 
 
+=======
+app.use(express.static("public"));
+
+require("./routes/html-routes.js")(app);
+
+app.set('port', (process.env.PORT || 3000));
+app.listen(app.get('port'), function () {
+	console.log('App listening on PORT ', app.get('port'));
+});
+>>>>>>> bebc150ab60f42329fe5502e6d2e35debb0d9d14

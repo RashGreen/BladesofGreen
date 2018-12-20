@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // *********************************************************************************
 // html-routes.js - this file offers a set of routes for sending users to the various html pages
 // *********************************************************************************
@@ -33,3 +34,11 @@ module.exports = function(app) {
   });
 
 };
+=======
+module.exports = function(app) {
+//load homepage
+app.get("/", function (req, res){
+    res.render("index");
+});
+}
+>>>>>>> bebc150ab60f42329fe5502e6d2e35debb0d9d14
