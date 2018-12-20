@@ -12,6 +12,7 @@
   "dependencies": {
     "config": "^3.0.1",
     "express": "^4.16.4",
-    "square-connect": "^2.20181212.0"
+    "square-connect": "^2.20181212.0",
+    "util": "^0.11.1"
   }
 }

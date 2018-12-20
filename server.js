@@ -7,6 +7,7 @@
 var express = require("express");
 const SquareConnect = require('square-connect');
 const config = require('config')
+var util = require('util');
 // Sets up the Express App
 // =============================================================
 var app = express();
