@@ -1,0 +1,365 @@
+<footer class="site-footer small--text-center" role="contentinfo">
+
+<div class="wrapper">
+
+  <div class="grid-uniform">
+
+    {% if settings.social_twitter_link != blank or settings.social_facebook_link != blank or settings.social_pinterest_link != blank or settings.social_google_plus_link != blank or settings.social_instagram_link != blank or settings.social_snapchat_link != blank or settings.social_tumblr_link != blank or settings.social_youtube_link != blank or settings.social_vimeo_link != blank or settings.social_fancy_link != blank or settings.social_rss_link != blank %}
+      {% assign show_social_icons = true %}
+    {% else %}
+      {% assign show_social_icons = false %}
+    {% endif %}
+
+    {% case section.blocks.size %}
+      {% when 0 %}
+      {% when 1 %}
+        {% assign column_width = 'text-center' %}
+        {%- assign article_width = 480 -%}
+      {% when 2 %}
+        {% assign column_width = 'post-large--one-half medium--one-half' %}
+        {%- assign article_width = 480 -%}
+      {% when 3 %}
+        {% assign column_width = 'post-large--one-third medium--one-third' %}
+        {%- assign article_width = 435 -%}
+      {% when 4 %}
+        {% assign column_width = 'post-large--one-quarter medium--one-half' %}
+        {%- assign article_width = 410 -%}
+      {% when 5 %}
+        {% assign column_width = 'post-large--one-fifth medium--one-half' %}
+        {%- assign article_width = 335 -%}
+      {% when 6 %}
+        {% assign column_width = 'post-large--one-sixth medium--one-half' %}
+        {%- assign article_width = 335 -%}
+    {% endcase %}
+
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'blog' %}
+          <div class="grid__item {{ column_width }} site-footer__links">
+            <h3 class="h4"><a href="/blogs/{{ block.settings.blog }}">{{ 'layout.footer.blog_title' | t }}</a></h3>
+            {% assign article = blogs[block.settings.blog].articles.first %}
+            <p class="h5">{{ article.title | link_to: article.url }}</p>
+            {% if article.image %}
+              {% capture img_id %}ArticleImage-{{ section.id }}--{{ article.image.id }}{% endcapture %}
+              {% capture wrapper_id %}ArticleImageWrapper-{{ section.id }}--{{ article.image.id }}{% endcapture %}
+              {%- assign img_url = article.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+              {%- assign image_alt = article.title | escape -%}
+              {% include 'image-style' with image: article.image, width: article_width, height: 480, wrapper_id: wrapper_id, img_id: img_id %}
+              <p>
+                <div id="{{ wrapper_id }}" class="article__image-wrapper supports-js">
+                  <div style="padding-top:{{ 1 | divided_by: article.image.aspect_ratio | times: 100}}%;">
+                    <img id="{{ img_id }}"
+                         class="article__image lazyload"
+                         src="{{ article.image | img_url: '300x300' }}"
+                         data-src="{{ img_url }}"
+                         data-widths="[90, 120, 150, 180, 360, 480, 600, 750, 940, 1080, 1296]"
+                         data-aspectratio="{{ article.image.aspect_ratio }}"
+                         data-sizes="auto"
+                         alt="{{ image_alt }}">
+                  </div>
+                </div>
+              </p>
+
+              <noscript>
+                <p>{{ article | img_url: 'large' | img_tag: image_alt, 'article__image' | link_to: article.url }}</p>
+              </noscript>
+            {% endif %}
+            {% if article.excerpt.size > 0 %}
+            <div class="clearfix">
+              {{ article.excerpt }}
+            </div>
+            {% else %}
+              <p>{{ article.content | strip_html | truncatewords: 30 }}</p>
+            {% endif %}
+          </div>
+
+        {% when 'menu' %}
+          <div class="grid__item {{ column_width }}">
+            {% unless num_columns == 1 %}
+            <h3 class="h4">{{ block.settings.menu_title | escape }}</h3>
+            {% endunless %}
+            <ul class="site-footer__links{% if num_columns == 1 %} inline-list{% endif %}">
+              {% for link in linklists[block.settings.menu].links %}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+
+        {% when 'social' %}
+          <div class="grid__item {{ column_width }}">
+            <h3 class="h4">{{ 'layout.footer.social_title' | t }}</h3>
+              {% comment %}
+                Loop through the social network links
+              {% endcomment %}
+              {% include 'social-links' %}
+          </div>
+
+        {% when 'text' %}
+          <div class="grid__item {{ column_width }}">
+            <h3 class="h4">{{ block.settings.title | escape }}</h3>
+            <div class="rte">{{ block.settings.richtext }}</div>
+          </div>
+
+        {% when 'newsletter' %}
+          <div class="grid__item {{ column_width }}">
+            <h3 class="h4">{{ 'layout.footer.newsletter_title' | t }}</h3>
+            {% unless block.settings.subtext == blank %}
+              {{ block.settings.subtext }}
+            {% endunless %}
+            {% include 'newsletter-form' %}
+          </div>
+
+      {% endcase %}
+    {% endfor %}
+  </div>
+
+  <hr class="hr--small hr--clear">
+
+  <div class="grid">
+    <div class="grid__item text-center">
+      <p class="site-footer__links">{{ 'layout.footer.copyright' | t }} &copy; {{ 'now' | date: "%Y" }}, {{ shop.name | link_to: '/' }}. {{ powered_by_link }}</p>
+    </div>
+  </div>
+
+  {% if section.settings.show_methods_of_payment %}
+    {% unless shop.enabled_payment_types == empty %}
+    <div class="grid">
+      <div class="grid__item text-center">
+        <span class="visually-hidden">{{ 'general.payment.method' | t }}</span>
+        <ul class="inline-list payment-icons">
+          {% for type in shop.enabled_payment_types %}
+            <li>
+              {{ type | payment_type_svg_tag: class: 'icon' }}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {% endunless %}
+  {% endif %}
+</div>
+
+</footer>
+
+
+
+{% schema %}
+{
+  "name": {
+    "de": "Fußzeile",
+    "en": "Footer",
+    "es": "Pie de página",
+    "fr": "Pied de page",
+    "it": "Footer",
+    "ja": "フッター",
+    "pt-BR": "Rodapé"
+  },
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_methods_of_payment",
+      "label": {
+        "de": "Zahlungssymbole",
+        "en": "Payment icons",
+        "es": "Iconos de pago",
+        "fr": "Icônes de paiement",
+        "it": "Icone di pagamento",
+        "ja": "支払いアイコン",
+        "pt-BR": "Ícones de pagamento"
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": {
+        "de": "Menü",
+        "en": "Menu",
+        "es": "Menú",
+        "fr": "Menu",
+        "it": "Menu",
+        "ja": "メニュー",
+        "pt-BR": "Menu"
+      },
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_title",
+          "label": {
+            "de": "Titel",
+            "en": "Heading",
+            "es": "Título",
+            "fr": "Titre",
+            "it": "Heading",
+            "ja": "見出し",
+            "pt-BR": "Título"
+          },
+          "default": {
+            "de": "Links",
+            "en": "Links",
+            "es": "Enlaces",
+            "fr": "Liens",
+            "it": "Links",
+            "ja": "リンク",
+            "pt-BR": "Links"
+          }
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": {
+            "de": "Menü",
+            "en": "Menu",
+            "es": "Menú",
+            "fr": "Menu",
+            "it": "Menu",
+            "ja": "メニュー",
+            "pt-BR": "Menu"
+          }
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": {
+        "de": "Text",
+        "en": "Text",
+        "es": "Texto",
+        "fr": "Texte",
+        "it": "Testo",
+        "ja": "テキスト",
+        "pt-BR": "Texto"
+      },
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "de": "Titel",
+            "en": "Heading",
+            "es": "Título",
+            "fr": "Titre",
+            "it": "Heading",
+            "ja": "見出し",
+            "pt-BR": "Título"
+          },
+          "default": {
+            "de": "Kontaktieren Sie uns",
+            "en": "Contact us",
+            "es": "Ponte en contacto con nosotros",
+            "fr": "Contactez-nous",
+            "it": "Contattaci",
+            "ja": "お問い合わせ",
+            "pt-BR": "Fale conosco"
+          }
+        },
+        {
+          "type": "richtext",
+          "id": "richtext",
+          "label": {
+            "de": "Text",
+            "en": "Text",
+            "es": "Texto",
+            "fr": "Texte",
+            "it": "Testo",
+            "ja": "テキスト",
+            "pt-BR": "Texto"
+          }
+        }
+      ]
+    },
+    {
+      "type": "blog",
+      "name": {
+        "de": "Letzter Blog-Beitrag",
+        "en": "Latest blog post",
+        "es": "Última entrada en el blog",
+        "fr": "Dernier article de blog",
+        "it": "Ultimo articolo del blog",
+        "ja": "最新のブログ記事",
+        "pt-BR": "Último post do blog"
+      },
+      "settings": [
+        {
+          "type": "blog",
+          "id": "blog",
+          "label": {
+            "de": "Blog",
+            "en": "Blog",
+            "es": "Blog",
+            "fr": "Blog",
+            "it": "Blog",
+            "ja": "ブログ",
+            "pt-BR": "Blog"
+          }
+        }
+      ]
+    },
+    {
+      "type": "social",
+      "name": {
+        "de": "Social-Media-Symbole",
+        "en": "Social icons",
+        "es": "Iconos de redes sociales",
+        "fr": "Icônes de partage social",
+        "it": "Icone social",
+        "ja": "ソーシャルアイコン",
+        "pt-BR": "Ícones de redes sociais"
+      },
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": {
+            "de": "Einstellungen und Konten für soziale Netzwerke in den allgemeinen Einstellungen bearbeiten",
+            "en": "Edit your social settings and accounts in General settings",
+            "es": "Edita tus cuentas y configuraciones sociales en la configuración general",
+            "fr": "Modifiez vos paramètres et vos comptes sociaux dans les paramètres généraux",
+            "it": "Modifica impostazioni e account social nelle Impostazioni generali",
+            "ja": "一般設定でソーシャル設定とアカウント設定を編集する",
+            "pt-BR": "Edite suas contas e configurações de redes sociais nas Configurações gerais."
+          }
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": {
+        "de": "Newsletter-Anmeldung",
+        "en": "Newsletter signup",
+        "es": "Suscripción al boletín",
+        "fr": "Inscription",
+        "it": "Iscrizione Newsletter",
+        "ja": "メールマガジンの登録",
+        "pt-BR": "Assinatura da newsletter"
+      },
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "subtext",
+          "label": {
+            "de": "Subtext",
+            "en": "Subtext",
+            "es": "Subtexto",
+            "fr": "Sous-texte",
+            "it": "Sottotesto",
+            "ja": "サブテキスト",
+            "pt-BR": "Subtexto"
+          },
+          "default": {
+            "de": "<p>Melden Sie sich für die neuesten Nachrichten, Angebote und Stile an</p>",
+            "en": "<p>Sign up for the latest news, offers and styles</p>",
+            "es": "<p>Regístrate para recibir las últimas noticias, ofertas y estilos</p>",
+            "fr": "<p>Inscrivez-vous pour connaître les derniers styles, offres et nouvelles</p>",
+            "it": "<p>Iscriviti per ricevere le ultime novità, offerte e stili</p>",
+            "ja": "<p>登録して最新のニュース、オファー、スタイルを受け取る</p>",
+            "pt-BR": "<p>Inscreva-se para receber os últimos estilos, notícias e ofertas</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
