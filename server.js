@@ -8,11 +8,15 @@ var express = require("express");
 <<<<<<< HEAD
 const SquareConnect = require('square-connect');
 const config = require('config')
+<<<<<<< HEAD
+var util = require('util');
+=======
 
 =======
 const SquareConnect = require("square-connect");
 const config = require("config");
 >>>>>>> bebc150ab60f42329fe5502e6d2e35debb0d9d14
+>>>>>>> 5eaf5d9ef4c1e807944e72490118f1f39fc8c1b2
 // Sets up the Express App
 // =============================================================
 var app = express();

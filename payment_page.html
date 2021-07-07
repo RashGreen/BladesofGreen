@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+      <!--Your payment page declaration-->
+ <div id="orderSummary">
+        ...
+         <button id='show-paymentform' onclick='buildForm()'>Pay now</button>
+       
+           <!--Square template form-container div-->
+           <div id="form-container">
+           ...   
+           </div>
+           <!--end Square template form-container div-->
+        ...   
+        </div>
+        <script type="text/javascript">
+         function buildForm() {
+           if (SqPaymentForm.isSupportedBrowser()) {
+             var paymentDiv = document.getElementById("form-container");
+             if (paymentDiv.style.display === "none") {
+                 paymentDiv.style.display = "block";
+             } 
+             paymentform.build();
+             paymentform.recalculateSize();
+           } else {
+             // Show a "Browser is not supported" message to your buyer
+           }
+         }
+        </script>
+        <!--end Your payment page declaration-->
+       
+       
+</body>
+</html>

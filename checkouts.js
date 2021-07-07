@@ -102,6 +102,12 @@ const body = {
   },
   redirect_url: 'https://merchant.website.com/order-confirm'
 };
+document.addEventListener("DOMContentLoaded", function(event) {
+  if (SqPaymentForm.isSupportedBrowser()) {
+    paymentForm.build();
+    paymentForm.recalculateSize();
+  }
+});
 
 api.createCheckout(LOCATION_ID, body)
   .then((response) => {
